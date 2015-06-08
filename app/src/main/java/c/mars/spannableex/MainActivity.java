@@ -1,10 +1,7 @@
 package c.mars.spannableex;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
@@ -14,7 +11,7 @@ import butterknife.InjectView;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String[] ACVALUES={"a", "b", "c", "adapter", "banana", "room"};
+    private Character[] s;
 
     @InjectView(R.id.e)
     MultiAutoCompleteTextView e;
@@ -26,25 +23,15 @@ public class MainActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        ArrayAdapter<String> a=new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, ACVALUES);
+        s=new Character[26];
+        char c='a';
+        for (int i=0;i<26;i++) {
+            s[i]=c++;
+        }
+        ArrayAdapter<Character> a=new ArrayAdapter<Character>(this, android.R.layout.simple_dropdown_item_1line, s);
         e.setAdapter(a);
-        e.setTokenizer(new MultiAutoCompleteTextView.Tokenizer() {
-            @Override
-            public int findTokenStart(CharSequence charSequence, int i) {
-                int f=charSequence.toString().lastIndexOf(' ');
-                return (f!=-1?f:i);
-            }
-
-            @Override
-            public int findTokenEnd(CharSequence charSequence, int i) {
-                return i;
-            }
-
-            @Override
-            public CharSequence terminateToken(CharSequence charSequence) {
-                return charSequence + " ";
-            }
-        });
+        e.setThreshold(1);
+        e.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }
 
 }
